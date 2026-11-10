@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../Wrblo_SAL_API/Wrblo.SAL.Core/Wrblo.SAL.Core.csproj" Id="7601f4e3-d1c1-4115-bb60-738372cef46a" />
+  <Project Path="../Wrblo_SAL_API/Wrblo.SAL.Shared/Wrblo.SAL.Shared.csproj" Id="5175a9c3-6ff4-4a7e-97c1-bfc5b9284414" />
+  <Project Path="../Wrblo_SAL_API/Wrblo.SAL.Test/Wrblo.SAL.Test.csproj" Id="2ee196ed-6d29-4dbf-88c4-b4dbbdef143a" />
+  <Project Path="../Wrblo_SAL_API/Wrblo-SAL/Wrblo.SAL.Api.csproj" />
+</Solution>

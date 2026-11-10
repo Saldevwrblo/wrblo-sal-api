@@ -1,0 +1,6 @@
+@Wrblo_SAL_HostAddress = http://localhost:5095
+
+GET {{Wrblo_SAL_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
