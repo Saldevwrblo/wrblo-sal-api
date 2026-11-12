@@ -361,3 +361,15 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+.git
+.github
+.vs
+.vscode
+**/bin
+**/obj
+**/TestResults
+**/node_modules
+**/.env
+**/appsettings.Development.json
+README.md
