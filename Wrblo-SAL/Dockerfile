@@ -14,19 +14,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0-nanoserver-ltsc2022 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Wrblo-SAL.csproj", "."]
-RUN dotnet restore "./Wrblo-SAL.csproj"
+COPY ["Wrblo.SAL.Api.csproj", "."]
+RUN dotnet restore "./Wrblo.SAL.Api.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./Wrblo-SAL.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+RUN dotnet build "./Wrblo.SAL.Api.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Wrblo-SAL.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Wrblo.SAL.Api.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Wrblo-SAL.dll"]
+ENTRYPOINT ["dotnet", "Wrblo.SAL.Api.dll"]
