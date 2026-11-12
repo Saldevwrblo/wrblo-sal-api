@@ -32,4 +32,10 @@
     <ProjectReference Include="..\Wrblo.SAL.Shared\Wrblo.SAL.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include=".github\workflows\ci.yml" />
+    <None Include=".github\workflows\deploy-dev.yml" />
+    <None Include=".github\workflows\deploy-prod.yml" />
+  </ItemGroup>
+
 </Project>
