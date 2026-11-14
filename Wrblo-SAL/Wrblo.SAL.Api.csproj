@@ -33,9 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include=".github\workflows\ci.yml" />
-    <None Include=".github\workflows\deploy-dev.yml" />
-    <None Include=".github\workflows\deploy-prod.yml" />
+    <Folder Include=".github\workflows\" />
   </ItemGroup>
 
 </Project>

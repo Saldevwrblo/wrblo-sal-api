@@ -1,6 +1,24 @@
-﻿namespace Wrblo_SAL.deployment.azure
-{
-    public class parameters
-    {
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appName": {
+      "value": "myapplication"
+    },
+    "environmentName": {
+      "value": "myapplication-prod"
+    },
+    "acrName": {
+      "value": "myapplicationregistry"
+    },
+    "logAnalyticsName": {
+      "value": "myapplication-logs"
+    },
+    "containerAppName": {
+      "value": "myapplication-api"
+    },
+    "imageName": {
+      "value": "myapplication"
     }
+  }
 }

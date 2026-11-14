@@ -1,12 +1,10 @@
-﻿
-services:
-
+﻿services:
   api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: Wrblo-SAL/Dockerfile
 
-    container_name: myapplication-api
+    container_name: wrblo-sal-api
 
     ports:
       - "8080:8080"
@@ -14,12 +12,13 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: 8080
+      PORT: 8080
       ConnectionStrings__DefaultConnection: >-
         Host=postgres;
         Port=5432;
         Database=sal_api;
         Username=wrblo_sal;
-        Password=${POSTGRES_PASSWORD}
+        Password=${POSTGRES_PASSWORD:-wrblo_local_dev_password}
 
     depends_on:
       postgres:
@@ -27,13 +26,12 @@ services:
 
   postgres:
     image: postgres:17
-
-    container_name: myapplication-postgres
+    container_name: wrblo-sal-postgres
 
     environment:
-      POSTGRES_DB: myapplication
-      POSTGRES_USER: appuser
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: sal_api
+      POSTGRES_USER: wrblo_sal
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wrblo_local_dev_password}
 
     ports:
       - "5432:5432"
@@ -42,7 +40,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U appuser -d myapplication"]
+      test: ["CMD-SHELL", "pg_isready -U wrblo_sal -d sal_api"]
       interval: 10s
       timeout: 5s
       retries: 5
