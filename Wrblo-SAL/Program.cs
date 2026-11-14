@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.OpenApi;
+using Scalar.AspNetCore;
 using Wrblo.SAL.Core.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +11,8 @@ var isContainerized = string.Equals(
     Environment.GetEnvironmentVariable("CONTAINERIZED"),
     "true",
     StringComparison.OrdinalIgnoreCase);
+var enableApiReference = builder.Configuration.GetValue<bool?>("ApiReference:Enabled")
+    ?? builder.Environment.IsDevelopment();
 
 if (!string.IsNullOrWhiteSpace(platformPort))
 {
@@ -18,20 +23,27 @@ var connectionString = builder.Configuration.GetSection("ConnectionStrings:Defau
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString, opt => opt.CommandTimeout(60)));
 builder.Services.AddHealthChecks();
 
-// Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
     //.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/dotnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, _, _) =>
+    {
+        document.Info.Title = "Wrblo SAL API";
+        document.Info.Version = "v1";
+        document.Info.Description = "API documentation for Wrblo SAL";
+        return Task.CompletedTask;
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (enableApiReference)
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 if (!isContainerized)
