@@ -75,7 +75,8 @@ public sealed class UserManager(
         GoogleLoginRequest request,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(_googleOptions.ClientId))
+        var audienceIds = _googleOptions.GetAudienceIds();
+        if (audienceIds.Count == 0)
         {
             return ApiResponse<LoginResponse>.Fail("Google authentication is not configured.");
         }
@@ -87,7 +88,7 @@ public sealed class UserManager(
                 request.IdToken,
                 new GoogleJsonWebSignature.ValidationSettings
                 {
-                    Audience = [_googleOptions.ClientId]
+                    Audience = audienceIds
                 });
         }
         catch (InvalidJwtException)

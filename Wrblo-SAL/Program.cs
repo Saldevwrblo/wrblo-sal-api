@@ -41,6 +41,26 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString, opt => opt.CommandTimeout(60)));
 builder.Services.AddHealthChecks();
 
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>() ?? [];
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        if (allowedOrigins.Length == 0)
+        {
+            policy.SetIsOriginAllowed(_ => false);
+            return;
+        }
+
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<GoogleOptions>(builder.Configuration.GetSection("Google"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -121,6 +141,7 @@ if (!isContainerized)
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
